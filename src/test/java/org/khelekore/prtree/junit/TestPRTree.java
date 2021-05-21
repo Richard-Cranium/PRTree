@@ -25,26 +25,29 @@ import static org.junit.Assert.*;
  */
 public class TestPRTree {
     private static final int BRANCH_FACTOR = 30;
-    private Rectangle2DConverter converter = new Rectangle2DConverter ();
+    private final Rectangle2DConverter converter = new Rectangle2DConverter ();
     private PRTree<Rectangle2D> tree;
-    private NodeFilter<Rectangle2D> acceptAll = new AcceptAll<Rectangle2D> ();
+    private final NodeFilter<Rectangle2D> acceptAll = new AcceptAll<> ();
 
     private static final double RANDOM_RANGE = 100000;
 
     @Before
     public void setUp() {
-	tree = new PRTree<Rectangle2D> (converter, BRANCH_FACTOR);
+	tree = new PRTree<> (converter, BRANCH_FACTOR);
     }
 
     private class Rectangle2DConverter implements MBRConverter<Rectangle2D> {
+        @Override
 	public int getDimensions () {
 	    return 2;
 	}
 
+        @Override
 	public double getMin (int axis, Rectangle2D t) {
 	    return axis == 0 ? t.getMinX () : t.getMinY ();
 	}
 
+        @Override
 	public double getMax (int axis, Rectangle2D t) {
 	    return axis == 0 ? t.getMaxX () : t.getMaxY ();
 	}
@@ -125,7 +128,7 @@ public class TestPRTree {
 	MBR queryOutside = new SimpleMBR (1495, 1504.9, 495, 504.9);
 	int shouldFindInside = 0;
 	int shouldFindOutside = 0;
-	List<Rectangle2D> rects = new ArrayList<Rectangle2D> (numRects * 2);
+	List<Rectangle2D> rects = new ArrayList<> (numRects * 2);
 	// build an "X"
 	System.err.println ("TestPRTree: Building random rectangles");
 	for (int i = 0; i < numRects; i++) {
@@ -176,8 +179,8 @@ public class TestPRTree {
 
 	Random random = new Random (1234);  // same random every time
 	for (int round = 0; round < numRounds; round++) {
-	    tree = new PRTree<Rectangle2D> (converter, 10);
-	    List<Rectangle2D> rects = new ArrayList<Rectangle2D> (numRects);
+	    tree = new PRTree<> (converter, 10);
+	    List<Rectangle2D> rects = new ArrayList<> (numRects);
 	    for (int i = 0; i < numRects; i++) {
 		Rectangle2D r =
 		    new Rectangle2D.Double (getRandomRectangleSize (random),
@@ -215,7 +218,7 @@ public class TestPRTree {
     public void testFindSpeed () {
 	System.err.println ("TestPRTree: Test find speed");
 	int numRects = 100000;
-	List<Rectangle2D> rects = new ArrayList<Rectangle2D> (numRects);
+	List<Rectangle2D> rects = new ArrayList<> (numRects);
 	for (int i = 0; i < numRects; i++)
 	    rects.add (new Rectangle2D.Double (i, i, 10, 10));
 
@@ -249,7 +252,7 @@ public class TestPRTree {
 	long start = System.nanoTime ();
 	MBR mbr = new SimpleMBR (295, 1504.9, 295, 5504.9);
 	for (int i = 0; i < numRounds; i++) {
-	    List<Rectangle2D> result = new ArrayList<Rectangle2D> (150);
+	    List<Rectangle2D> result = new ArrayList<> (150);
 	    tree.find (mbr, result);
 	    for (Rectangle2D r : result)
 		count++;
@@ -300,7 +303,7 @@ public class TestPRTree {
     public void testNNMany () {
 	System.out.println ("TestPRTree: Testing nn many");
 	int numRects = 100000;
-	List<Rectangle2D> rects = new ArrayList<Rectangle2D> (numRects);
+	List<Rectangle2D> rects = new ArrayList<> (numRects);
 	for (int i = 0; i < numRects; i++)
 	    rects.add (new Rectangle2D.Double (i * 10, i * 10, 10, 10));
 	tree.load (rects);
@@ -370,6 +373,7 @@ public class TestPRTree {
     }
 
     private static class AcceptAll<T> implements NodeFilter<T> {
+        @Override
 	public boolean accept (T t) {
 	    return true;
 	}
@@ -377,6 +381,7 @@ public class TestPRTree {
 
     private static class RectDistance
 	implements DistanceCalculator<Rectangle2D> {
+        @Override
 	public double distanceTo (Rectangle2D r, PointND p) {
 	    double md = MinDist2D.get (r.getMinX (), r.getMinY (),
 				       r.getMaxX (), r.getMaxY (),

@@ -22,6 +22,7 @@ public class SimpleMBR implements MBR {
     }
 
     /** Create a new SimpleMBR from a given object and a MBRConverter
+     * @param <T>
      * @param t the object to create the bounding box for
      * @param converter the actual MBRConverter to use
      */
@@ -35,18 +36,22 @@ public class SimpleMBR implements MBR {
 	}
     }
 
+    @Override
     public int getDimensions () {
 	return values.length / 2;
     }
 
+    @Override
     public double getMin (int axis) {
 	return values[axis * 2];
     }
 
+    @Override
     public double getMax (int axis) {
 	return values[axis * 2 + 1];
     }
 
+    @Override
     public MBR union (MBR mbr) {
 	int dims = getDimensions ();
 	SimpleMBR n = new SimpleMBR (dims);
@@ -60,6 +65,7 @@ public class SimpleMBR implements MBR {
 	return n;
     }
 
+    @Override
     public boolean intersects (MBR other) {
 	for (int i = 0; i < getDimensions (); i++) {
 	    if (other.getMax (i) < getMin (i) || other.getMin (i) > getMax (i))
@@ -68,6 +74,7 @@ public class SimpleMBR implements MBR {
 	return true;
     }
 
+    @Override
     public <T> boolean intersects (T t, MBRConverter<T> converter) {
 	for (int i = 0; i < getDimensions (); i++) {
 	    if (converter.getMax (i, t) < getMin (i) ||
@@ -77,7 +84,8 @@ public class SimpleMBR implements MBR {
 	return true;
     }
 
-    @Override public String toString () {
+    @Override 
+    public String toString () {
 	return getClass ().getSimpleName () +
 	    "{values: " + java.util.Arrays.toString (values) + "}";
     }

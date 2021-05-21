@@ -15,18 +15,21 @@ class LeafNode<T> extends NodeBase<T, T> {
 	return new SimpleMBR (t, converter);
     }
 
-    @Override public MBR computeMBR (MBRConverter<T> converter) {
+    @Override 
+    public MBR computeMBR (MBRConverter<T> converter) {
 	MBR ret = null;
 	for (int i = 0, s = size (); i < s; i++)
 	    ret = getUnion (ret, getMBR (get (i), converter));
 	return ret;
     }
 
+    @Override
     public void expand (MBR mbr, MBRConverter<T> converter,
 			List<T> found, List<Node<T>> nodesToExpand) {
 	find (mbr, converter, found);
     }
 
+    @Override
     public void find (MBR mbr, MBRConverter<T> converter, List<T> result) {
 	for (int i = 0, s = size (); i < s; i++) {
 	    T  t = get (i);
@@ -35,6 +38,7 @@ class LeafNode<T> extends NodeBase<T, T> {
 	}
     }
 
+    @Override
     public void nnExpand (DistanceCalculator<T> dc,
 			  NodeFilter<T> filter,
 			  List<DistanceResult<T>> drs,
@@ -47,7 +51,7 @@ class LeafNode<T> extends NodeBase<T, T> {
 		double dist = dc.distanceTo (t, mdc.p);
 		int n = drs.size ();
 		if (n < maxHits || dist < drs.get (n - 1).getDistance ()) {
-		    add (drs, new DistanceResult<T> (t, dist), maxHits);
+		    add (drs, new DistanceResult<> (t, dist), maxHits);
 		}
 	    }
 	}
@@ -69,6 +73,7 @@ class LeafNode<T> extends NodeBase<T, T> {
 
     private static final Comparator<DistanceResult<?>> comp =
 	new Comparator<DistanceResult<?>> () {
+        @Override
 	public int compare (DistanceResult<?> d1, DistanceResult<?> d2) {
 	    return Double.compare (d1.getDistance (), d2.getDistance ());
 	}

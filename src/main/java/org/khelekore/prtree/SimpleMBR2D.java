@@ -33,22 +33,27 @@ public class SimpleMBR2D implements MBR2D {
 	    ", xmax: " + xmax + ", ymax: " + ymax + "}";
     }
 
+    @Override
     public double getMinX () {
 	return xmin;
     }
 
+    @Override
     public double getMinY () {
 	return ymin;
     }
 
+    @Override
     public double getMaxX () {
 	return xmax;
     }
 
+    @Override
     public double getMaxY () {
 	return ymax;
     }
 
+    @Override
     public MBR2D union (MBR2D other) {
 	double uxmin = Math.min (xmin, other.getMinX ());
 	double uymin = Math.min (ymin, other.getMinY ());
@@ -57,6 +62,7 @@ public class SimpleMBR2D implements MBR2D {
 	return new SimpleMBR2D (uxmin, uymin, uxmax, uymax);
     }
 
+    @Override
     public boolean intersects (MBR2D other) {
 	return !(other.getMaxX () < xmin || other.getMinX () > xmax ||
 		 other.getMaxY () < ymin || other.getMinY () > ymax);

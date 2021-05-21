@@ -12,10 +12,12 @@ public class SimplePointND implements PointND {
 	this.ords = ords;
     }
 
+    @Override
     public int getDimensions () {
 	return ords.length;
     }
 
+    @Override
     public double getOrd (int axis) {
 	return ords[axis];
     }

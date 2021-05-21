@@ -29,5 +29,11 @@ public class DistanceResult<T> {
     public double getDistance () {
 	return dist;
     }
+
+    @Override
+    public String toString() {
+        return "DistanceResult{" + "t=" + t + ", dist=" + dist + '}';
+    }
+    
 }
 

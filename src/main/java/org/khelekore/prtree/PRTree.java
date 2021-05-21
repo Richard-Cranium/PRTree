@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class PRTree<T> {
 
-    private MBRConverter<T> converter;
-    private int branchFactor;
+    private final MBRConverter<T> converter;
+    private final int branchFactor;
 
     private Node<T> root;
     private int numLeafs;
@@ -45,8 +45,8 @@ public class PRTree<T> {
 	LeafBuilder lb = new LeafBuilder (converter.getDimensions (), branchFactor);
 
 	List<LeafNode<T>> leafNodes =
-	    new ArrayList<LeafNode<T>> (estimateSize (numLeafs));
-	lb.buildLeafs (data, new DataComparators<T> (converter),
+	    new ArrayList<> (estimateSize (numLeafs));
+	lb.buildLeafs (data, new DataComparators<> (converter),
 		       new LeafNodeFactory (), leafNodes);
 
 	height = 1;
@@ -54,8 +54,8 @@ public class PRTree<T> {
 	while (nodes.size () > branchFactor) {
 	    height++;
 	    List<InternalNode<T>> internalNodes =
-		new ArrayList<InternalNode<T>> (estimateSize (nodes.size ()));
-	    lb.buildLeafs (nodes, new InternalNodeComparators<T> (converter),
+		new ArrayList<> (estimateSize (nodes.size ()));
+	    lb.buildLeafs (nodes, new InternalNodeComparators<> (converter),
 			   new InternalNodeFactory (), internalNodes);
 	    nodes = internalNodes;
 	}
@@ -67,27 +67,29 @@ public class PRTree<T> {
     }
 
     private <N extends Node<T>> void setRoot (List<N> nodes) {
-	if (nodes.size () == 0)
-	    root = new InternalNode<T> (new Object[0]);
+	if (nodes.isEmpty())
+	    root = new InternalNode<> (new Object[0]);
 	else if (nodes.size () == 1) {
 	    root = nodes.get (0);
 	} else {
 	    height++;
-	    root = new InternalNode<T> (nodes.toArray ());
+	    root = new InternalNode<> (nodes.toArray ());
 	}
     }
 
     private class LeafNodeFactory
 	implements NodeFactory<LeafNode<T>> {
+        @Override
 	public LeafNode<T> create (Object[] data) {
-	    return new LeafNode<T> (data);
+	    return new LeafNode<> (data);
 	}
     }
 
     private class InternalNodeFactory
 	implements NodeFactory<InternalNode<T>> {
+        @Override
 	public InternalNode<T> create (Object[] data) {
-	    return new InternalNode<T> (data);
+	    return new InternalNode<> (data);
 	}
     }
 
@@ -181,6 +183,7 @@ public class PRTree<T> {
     public Iterable<T> find (final MBR query) {
 	validateRect (query);
 	return new Iterable<T> () {
+            @Override
 	    public Iterator<T> iterator () {
 		return new Finder (query);
 	    }
@@ -200,10 +203,10 @@ public class PRTree<T> {
     }
 
     private class Finder implements Iterator<T> {
-	private MBR mbr;
+	private final MBR mbr;
 
-	private List<T> ts = new ArrayList<T> ();
-	private List<Node<T>> toVisit = new ArrayList<Node<T>> ();
+	private final List<T> ts = new ArrayList<> ();
+	private final List<Node<T>> toVisit = new ArrayList<> ();
 	private T next;
 
 	private int visitedNodes = 0;
@@ -215,10 +218,12 @@ public class PRTree<T> {
 	    findNext ();
 	}
 
+        @Override
 	public boolean hasNext () {
 	    return next != null;
 	}
 
+        @Override
 	public T next () {
 	    T toReturn = next;
 	    findNext ();
@@ -239,6 +244,7 @@ public class PRTree<T> {
 	    }
 	}
 
+        @Override
 	public void remove () {
 	    throw new UnsupportedOperationException ("Not implemented");
 	}
@@ -259,7 +265,7 @@ public class PRTree<T> {
 	if (isEmpty ())
 	    return Collections.emptyList ();
 	NearestNeighbour<T> nn =
-	    new NearestNeighbour<T> (converter, filter, maxHits, root, dc, p);
+	    new NearestNeighbour<> (converter, filter, maxHits, root, dc, p);
 	return nn.find ();
     }
 }

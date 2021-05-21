@@ -15,6 +15,7 @@ class InternalNode<T> extends NodeBase<Node<T>, T> {
 	return ret;
     }
 
+    @Override
     public void expand (MBR mbr, MBRConverter<T> converter, List<T> found,
 			List<Node<T>> nodesToExpand) {
 	for (int i = 0, s = size (); i < s; i++) {
@@ -24,6 +25,7 @@ class InternalNode<T> extends NodeBase<Node<T>, T> {
 	}
     }
 
+    @Override
     public void find (MBR mbr, MBRConverter<T> converter, List<T> result) {
 	for (int i = 0, s = size (); i < s; i++) {
 	    Node<T> n = get (i);
@@ -32,6 +34,7 @@ class InternalNode<T> extends NodeBase<Node<T>, T> {
 	}
     }
 
+    @Override
     public void nnExpand (DistanceCalculator<T> dc,
 			  NodeFilter<T> filter,
 			  List<DistanceResult<T>> drs,

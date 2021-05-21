@@ -6,12 +6,13 @@ package org.khelekore.prtree;
  */
 abstract class NodeBase<N, T> implements Node<T> {
     private MBR mbr;
-    private Object[] data;
+    private final Object[] data;
 
     public NodeBase (Object[] data) {
 	this.data = data;
     }
 
+    @Override
     public int size () {
 	return data.length;
     }
@@ -21,6 +22,7 @@ abstract class NodeBase<N, T> implements Node<T> {
 	return (N)data[i];
     }
     
+    @Override
     public MBR getMBR (MBRConverter<T> converter) {
 	if (mbr == null)
 	    mbr = computeMBR (converter);
